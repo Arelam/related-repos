@@ -1,0 +1,3 @@
+aiohttp==3.7.3
+#pre-release gql 3.X needed
+gql>=3.0.0a5

@@ -23,10 +23,11 @@ class GitHubAPI():
     
     async def filteredRepo(self, org, repo):
         await self.getRepo(org, repo)
-        detail = self.filterRepo()
-        repoJson = {}
-        repoJson["repository"] = detail
-        return repoJson
+        return self.filterRepo()
+        # detail = self.filterRepo()
+        # repoJson = {}
+        # repoJson["repository"] = detail
+        # return repoJson
 
     async def getRepo(self, arg_org, arg_repo):
 

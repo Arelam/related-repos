@@ -20,6 +20,69 @@ class GitHubAPI():
         repoJson = {}
         repoJson["repositories"] = repo
         return repoJson
+    
+    async def filteredRepo(self, org, repo):
+        await self.getRepo(org, repo)
+        detail = self.filterRepo()
+        repoJson = {}
+        repoJson["repository"] = detail
+        return repoJson
+
+    async def getRepo(self, arg_org, arg_repo):
+
+        # Using `async with` on the client will start a connection on the transport
+        # and provide a `session` variable to execute queries on this connection
+        async with Client(
+                transport=self.__transport, fetch_schema_from_transport=True,
+        ) as session:
+
+            # Execute single query
+            query = gql(
+                """
+                query repo($name:String!, $repo:String!) {
+                    repository(name: $repo, owner: $name) {
+                        description
+                        descriptionHTML
+                        name
+                        owner {
+                            avatarUrl
+                            login
+                        }
+                        projectsUrl
+                        url
+                        stargazerCount
+                        watchers {
+                            totalCount
+                        }
+                        releases(first: 10) {
+                            totalCount
+                            nodes {
+                            publishedAt
+                            }
+                        }
+                    }
+                    }
+
+            """
+            )
+            params = {
+                "name": arg_org,
+                "repo": arg_repo
+            }
+            result = await session.execute(query, params)
+            self.repo = result
+
+    def filterRepo(self):
+        node = self.repo["repository"]
+        out = {}
+        out["name"] = node["name"]
+        out["description"] = node["description"]
+        out["owner"] = node["owner"]["login"]
+        out["owner_avatar_url"] = node["owner"]["avatarUrl"]
+        out["url"] = node["url"]
+        out["stargazers_count"] = node["stargazerCount"]
+        out["watchers_count"] = node["watchers"]["totalCount"]
+        return out
 
     async def getOwned(self, arg_org):
 
@@ -32,43 +95,44 @@ class GitHubAPI():
             # Execute single query
             query = gql(
                 """
-                query relatedRepos {
-                rateLimit {
-                    limit
-                    cost
-                    remaining
-                    resetAt
-                }
-                organization(login: "%s") {
-                    repositories(affiliations: OWNER, first: 10, orderBy: {field: STARGAZERS, direction: DESC}) {
-                    edges {
-                        node {
-                        id
-                        name
-                        url
-                        description
-                        forkCount
-                        stargazerCount
-                        watchers {
-                            totalCount
-                        }
-                        owner {
-                            avatarUrl
-                            login
-                            url
-                        }
-                        }
-                    }
-                    }
-                    avatarUrl
+                query relatedRepos($name: String!) {
+            rateLimit {
+                limit
+                cost
+                remaining
+                resetAt
+            }
+            organization(login: $name) {
+                repositories(affiliations: OWNER, first: 10, orderBy: {field: STARGAZERS, direction: DESC}) {
+                edges {
+                    node {
+                    id
+                    name
+                    url
                     description
+                    forkCount
+                    stargazerCount
+                    watchers {
+                        totalCount
+                    }
+                    owner {
+                        avatarUrl
+                        login
+                        url
+                    }
+                    }
                 }
                 }
-            """ % (
-                    arg_org,
-                )
+                avatarUrl
+                description
+            }
+            }
+            """
             )
-            result = await session.execute(query)
+            params = {
+                "name": arg_org
+            }
+            result = await session.execute(query, params)
             self.repos = result
             #return result#["organization"]["repositories"]["edges"]
 

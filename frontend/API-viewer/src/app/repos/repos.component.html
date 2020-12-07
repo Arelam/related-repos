@@ -1,0 +1,9 @@
+<h2>{{ name }}'s Repositories</h2>
+<p *ngIf="!owner">Searching for repos...</p>
+<ul class="repos" *ngIf="owner">
+	<li *ngFor="let repo of owner.repositories"	>
+		<a routerLink="/{{repo.owner}}/detail/{{repo.name}}">
+			<span>{{repo.name}}</span>
+		</a>
+	</li>
+</ul>

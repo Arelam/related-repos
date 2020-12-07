@@ -1,0 +1,3 @@
+# Local install of angular
+/node_modules
+package-lock.json

@@ -1,0 +1,22 @@
+<div *ngIf="repo">
+	<section>
+		<h2>{{ repo.name }} Details</h2>
+		<section>
+			<div>Stats:</div>
+			<div>Watchers: {{ repo.watchers_count }}</div>
+			<div>Stars: {{ repo.stargazers_count }}</div>
+			<a [href]="repo.url" target="_blank">GitHub page</a>
+		</section>
+		
+		<section>
+			<img [src]="repo.owner_avatar_url" [alt]="repo.owner+' avatar'">
+			<div>Made by {{ repo.owner }}</div>
+			<div>{{ repo.description }}</div>
+		</section>
+		
+		
+	</section>
+</div>
+<div *ngIf="!repo">
+	Loading details
+</div>

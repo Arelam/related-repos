@@ -1,0 +1,5 @@
+<div id="search-component">
+	<label for="search-box">Search for repos</label>
+	<input #searchInput id="search-box" type="text" (input)=typeSearch(searchInput.value)>
+	<button (click)="onSearch(searchInput.value)">Search</button>
+</div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-repo-search',
@@ -10,6 +11,7 @@ import { Subject } from 'rxjs';
 export class RepoSearchComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
@@ -18,8 +20,8 @@ export class RepoSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSearch(term: string) {
-    this.router.navigate([term+'/list'])
+  onSearch(term: string): void {
+    this.router.navigate([term+'/list']);
   }
 
   typeSearch(term: string): void {

@@ -7,7 +7,14 @@ import { ReposComponent } from './repos/repos.component';
 import { RepoDetailComponent } from './repo-detail/repo-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
+
 import { RepoSearchComponent } from './repo-search/repo-search.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+import {MatFormFieldModule} from '@angular/material/form-field'; 
+import {MatInputModule} from '@angular/material/input'; 
+import {MatIconModule} from '@angular/material/icon'; 
+import {MatCardModule} from '@angular/material/card'; 
 
 @NgModule({
   declarations: [
@@ -20,7 +27,12 @@ import { RepoSearchComponent } from './repo-search/repo-search.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

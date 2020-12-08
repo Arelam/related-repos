@@ -1,22 +1,27 @@
 <div *ngIf="repo">
-	<section>
-		<h2>{{ repo.name }} Details</h2>
-		<section>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>{{ repo.name }}</mat-card-title>
+			<mat-card-subtitle>By 
+				<a routerLink="/{{repo.owner}}/list">
+					<img mat-mat-card-image [src]="repo.owner_avatar_url" 
+					[alt]="repo.owner+' avatar'" class="avatar">
+					{{ repo.owner }}
+				</a>
+			</mat-card-subtitle>
+		</mat-card-header>
+
+		<mat-card-content>
 			<div>Stats:</div>
 			<div>Watchers: {{ repo.watchers_count }}</div>
 			<div>Stars: {{ repo.stargazers_count }}</div>
+			<p>{{ repo.description }}</p>
 			<a [href]="repo.url" target="_blank">GitHub page</a>
-		</section>
-		
-		<section>
-			<img [src]="repo.owner_avatar_url" [alt]="repo.owner+' avatar'">
-			<div>Made by {{ repo.owner }}</div>
-			<div>{{ repo.description }}</div>
-		</section>
-		
-		
-	</section>
+		</mat-card-content>
+	</mat-card>
 </div>
+
 <div *ngIf="!repo">
-	Loading details
+	<mat-spinner></mat-spinner>
+	Loading details...
 </div>

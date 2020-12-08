@@ -1,10 +1,12 @@
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
+from GitHubGQL import GitHubGQL
 
 class GitHubAPI():
 
     def __init__(self, key):
         self.GITHUB_SECRET_KEY = key
+        self.gql = GitHubGQL
 
         self.__headers = {
             "Authorization": "bearer " + self.GITHUB_SECRET_KEY
@@ -38,34 +40,7 @@ class GitHubAPI():
         ) as session:
 
             # Execute single query
-            query = gql(
-                """
-                query repo($name:String!, $repo:String!) {
-                    repository(name: $repo, owner: $name) {
-                        description
-                        descriptionHTML
-                        name
-                        owner {
-                            avatarUrl
-                            login
-                        }
-                        projectsUrl
-                        url
-                        stargazerCount
-                        watchers {
-                            totalCount
-                        }
-                        releases(first: 10) {
-                            totalCount
-                            nodes {
-                            publishedAt
-                            }
-                        }
-                    }
-                    }
-
-            """
-            )
+            query = gql(self.gql.repoDetails())
             params = {
                 "name": arg_org,
                 "repo": arg_repo
@@ -94,42 +69,7 @@ class GitHubAPI():
         ) as session:
 
             # Execute single query
-            query = gql(
-                """
-                query relatedRepos($name: String!) {
-            rateLimit {
-                limit
-                cost
-                remaining
-                resetAt
-            }
-            organization(login: $name) {
-                repositories(affiliations: OWNER, first: 10, orderBy: {field: STARGAZERS, direction: DESC}) {
-                edges {
-                    node {
-                    id
-                    name
-                    url
-                    description
-                    forkCount
-                    stargazerCount
-                    watchers {
-                        totalCount
-                    }
-                    owner {
-                        avatarUrl
-                        login
-                        url
-                    }
-                    }
-                }
-                }
-                avatarUrl
-                description
-            }
-            }
-            """
-            )
+            query = gql(self.gql.relatedRepos())
             params = {
                 "name": arg_org
             }

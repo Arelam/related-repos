@@ -17,12 +17,53 @@ class GitHubAPI():
             )
 
     async def filteredOwned(self, name):
-        await self.getOwned(name)
-        repo = self.filterResponse()
+        #await self.getOwned(name)
+        related = await self.getOwned(name)
+        
+        
+        # repoOrg = related["organization"]["repositories"]["nodes"]
+        # repoMember = repoList["organization"]["membersWithRole"]["nodes"]["repositories"]["nodes"]
+        # repoMemberWatch = repoList["organization"]["membersWithRole"]["nodes"]["watching"]["nodes"]
+        
+        # https://stackoverflow.com/a/26853961
+        #repoMerge = {**repoOrg, **repoMember, **repoMemberWatch}
+
+        #repos = self.filterResponse(await self.getOwned(name))
+        repos = self.extractNodeLists(related)
         repoJson = {}
-        repoJson["repositories"] = repo
+        repoJson["repositories"] = repos
         return repoJson
     
+    @staticmethod
+    def extractNodeLists(dictNode):
+        lists = []
+        for node in dictNode["organization"]["repositories"]["nodes"]:
+            out = GitHubAPI.filterRepoData(node)
+            lists.append(out)
+        for node in dictNode["organization"]["membersWithRole"]["nodes"]:
+            for innerNode in node["repositories"]["nodes"]:
+                out = GitHubAPI.filterRepoData(innerNode)
+                if out not in lists:
+                    lists.append(out)
+            for innerNode in node["watching"]["nodes"]:
+                out = GitHubAPI.filterRepoData(innerNode)
+                if out not in lists:
+                    lists.append(out)
+        return lists
+
+    
+    @staticmethod
+    def filterRepoData(repo):
+        out = {}
+        out["name"] = repo["name"]
+        out["description"] = repo["description"]
+        out["owner"] = repo["owner"]["login"]
+        out["owner_avatar_url"] = repo["owner"]["avatarUrl"]
+        out["url"] = repo["url"]
+        out["stargazers_count"] = repo["stargazerCount"]
+        out["watchers_count"] = repo["watchers"]["totalCount"]
+        return out
+
     async def filteredRepo(self, org, repo):
         await self.getRepo(org, repo)
         return self.filterRepo()
@@ -74,20 +115,24 @@ class GitHubAPI():
                 "name": arg_org
             }
             result = await session.execute(query, params)
-            self.repos = result
+            #self.repos = result
+            return result
             #return result#["organization"]["repositories"]["edges"]
 
-    def filterResponse(self):
-        repoList = []
-        repoEdges = self.repos["organization"]["repositories"]["edges"]
-        for node in repoEdges:
+    @staticmethod
+    def filterResponse(repoList):
+        repoListed = []
+        #repoEdges = self.repos["organization"]["repositories"]["edges"]
+        #repoEdges = self.repos["organization"]["repositories"]["nodes"]
+
+        for node in repoList:
             out = {}
-            out["name"] = node["node"]["name"]
-            out["description"] = node["node"]["description"]
-            out["owner"] = node["node"]["owner"]["login"]
-            out["owner_avatar_url"] = node["node"]["owner"]["avatarUrl"]
-            out["url"] = node["node"]["url"]
-            out["stargazers_count"] = node["node"]["stargazerCount"]
-            out["watchers_count"] = node["node"]["watchers"]["totalCount"]
-            repoList.append(out)
-        return repoList
+            out["name"] = node["name"]
+            out["description"] = node["description"]
+            out["owner"] = node["owner"]["login"]
+            out["owner_avatar_url"] = node["owner"]["avatarUrl"]
+            out["url"] = node["url"]
+            out["stargazers_count"] = node["stargazerCount"]
+            out["watchers_count"] = node["watchers"]["totalCount"]
+            repoListed.append(out)
+        return repoListed

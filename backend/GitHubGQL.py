@@ -12,24 +12,22 @@ class GitHubGQL():
                 }
                 organization(login: $name) {
                     repositories(first: 100, orderBy: {field: STARGAZERS, direction: DESC}, ownerAffiliations: OWNER, privacy: PUBLIC) {
-                    edges {
-                        node {
-                        id
-                        name
-                        url
-                        description
-                        forkCount
-                        stargazerCount
-                        watchers {
-                            totalCount
-                        }
-                        owner {
-                            avatarUrl
-                            login
+                        nodes {
+                            id
+                            name
                             url
+                            description
+                            forkCount
+                            stargazerCount
+                            watchers {
+                                totalCount
+                            }
+                            owner {
+                                avatarUrl
+                                login
+                                url
+                            }
                         }
-                        }
-                    }
                     }
                     avatarUrl
                     description

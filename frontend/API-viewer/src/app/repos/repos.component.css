@@ -35,7 +35,4 @@
 		transform: translate(-50%, -50%);
 	}
 
-	.card-aside.container button.close {
-		display: inline;
-	}
 }

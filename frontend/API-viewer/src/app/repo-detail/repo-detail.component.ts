@@ -9,8 +9,7 @@ import { RepoService } from '../repo.service';
   styleUrls: ['./repo-detail.component.css']
 })
 export class RepoDetailComponent implements OnInit {
-  @Input() repo!: Repo;
-  //repo!: Repo;
+  @Input() repo!: Repo | null;
   
   constructor(
     private route: ActivatedRoute,
@@ -18,15 +17,11 @@ export class RepoDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getRepo();
   }
 
-  getRepo(): void {
-    const owner = this.route.snapshot.paramMap.get('owner');
-    const name = this.route.snapshot.paramMap.get('name');
-    if(!name || !owner) return;
-    this.repoService.getRepo(owner, name)
-      .subscribe(repo => this.repo = repo);
+  // User hide-able
+  onClose(): void {
+    this.repo = null;
   }
 
 }

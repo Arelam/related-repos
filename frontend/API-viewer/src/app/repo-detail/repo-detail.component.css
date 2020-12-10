@@ -1,3 +1,13 @@
 .avatar {
 	vertical-align: middle;
 }
+
+button.close {
+	display: none;
+}
+
+@media (max-width: 40em) {
+	button.close {
+		display: inline;
+	}
+}

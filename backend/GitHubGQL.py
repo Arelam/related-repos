@@ -2,7 +2,7 @@ class GitHubGQL():
 
     @staticmethod
     def relatedRepos():
-        owned = """
+        return """
             query relatedRepos($name: String!) {
                 rateLimit {
                     limit
@@ -11,32 +11,74 @@ class GitHubGQL():
                     resetAt
                 }
                 organization(login: $name) {
-                    repositories(affiliations: OWNER, first: 10, orderBy: {field: STARGAZERS, direction: DESC}) {
-                        edges {
-                            node {
-                                id
-                                name
-                                url
-                                description
-                                forkCount
-                                stargazerCount
-                                watchers {
-                                    totalCount
-                                }
-                                owner {
-                                    avatarUrl
-                                    login
-                                    url
-                                }
-                            }
+                    repositories(first: 100, orderBy: {field: STARGAZERS, direction: DESC}, ownerAffiliations: OWNER, privacy: PUBLIC) {
+                    edges {
+                        node {
+                        id
+                        name
+                        url
+                        description
+                        forkCount
+                        stargazerCount
+                        watchers {
+                            totalCount
                         }
+                        owner {
+                            avatarUrl
+                            login
+                            url
+                        }
+                        }
+                    }
                     }
                     avatarUrl
                     description
+                    membersWithRole(first: 20) {
+                    totalCount
+                    nodes {
+                        id
+                        company
+                        name
+                        login
+                        repositories(first: 20, privacy: PUBLIC, orderBy: {field: STARGAZERS, direction: DESC}) {
+                        totalCount
+                        nodes {
+                            description
+                            name
+                            owner {
+                                avatarUrl
+                                login
+                                url
+                            }
+                            url
+                            stargazerCount
+                            watchers {
+                                totalCount
+                            }
+                        }
+                        }
+                        watching(first: 20, privacy: PUBLIC, orderBy: {field: STARGAZERS, direction: DESC}) {
+                        totalCount
+                        nodes {
+                            description
+                            name
+                            owner {
+                                login
+                                avatarUrl
+                                url
+                            }
+                            url
+                            stargazerCount
+                            watchers {
+                                totalCount
+                            }
+                        }
+                        }
+                    }
+                    }
                 }
             }
             """
-        return owned
     
     @staticmethod
     def repoDetails():

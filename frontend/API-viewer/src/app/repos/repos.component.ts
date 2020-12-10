@@ -10,9 +10,8 @@ import { RepoService } from '../repo.service';
   styleUrls: ['./repos.component.css']
 })
 export class ReposComponent implements OnInit {
-  //repos!: Repo[];
-  owner!: Owner;
-  name!: string;
+  related!: Owner;
+  orgSearch!: string;
 
   selectedRepo!: Repo;
 
@@ -21,26 +20,20 @@ export class ReposComponent implements OnInit {
     private repoService: RepoService
   ) { }
 
-  // getRepos(): void {
-  //   this.repoService.getRepos()
-  //     .subscribe(repos => this.repos = repos)
-  //   //this.repos = this.repoService.getRepos();
-  // }
-
-  getOwner(): void {
+  getRelatedRepos(): void {
     let org = this.route.snapshot.paramMap.get('owner');
     if(!org) return;
-    this.name = org;
-    this.repoService.getOwner(this.name)
-      .subscribe(owner => this.owner = owner)
+    this.orgSearch = org;
+    this.repoService.getOwner(org)
+      .subscribe(rep => this.related = rep)
   }
 
-  // onSelect(repo: Repo): void {
-  //   this.selectedRepo = repo;
-  // }
+  onSelect(repo: Repo): void {
+    this.selectedRepo = repo;
+  }
 
   ngOnInit(): void {
-    this.getOwner();
+    this.getRelatedRepos();
   }
 
 }

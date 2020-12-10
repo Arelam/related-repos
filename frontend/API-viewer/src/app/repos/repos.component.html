@@ -1,13 +1,16 @@
-<h2>{{ name }}'s Repositories</h2>
-<div *ngIf="!owner">
+<h2>{{ orgSearch }}'s related repositories</h2>
+
+<mat-selection-list #repos [multiple]="false" *ngIf="related">
+	<mat-list-option *ngFor="let repo of related.repositories" 
+	[value]="repo" (click)="onSelect(repo)">
+		<div mat-line>{{ repo.name }}</div>
+		<div mat-line>{{ repo.description }}</div>
+	</mat-list-option>
+</mat-selection-list>
+
+<div *ngIf="!related">
 	<mat-spinner></mat-spinner>
 	<p>Searching for repos...</p>
 </div>
 
-<ul class="repos" *ngIf="owner">
-	<li *ngFor="let repo of owner.repositories"	>
-		<a routerLink="/{{repo.owner}}/detail/{{repo.name}}">
-			<span>{{repo.name}}</span>
-		</a>
-	</li>
-</ul>
+<app-repo-detail [repo]="selectedRepo"></app-repo-detail>

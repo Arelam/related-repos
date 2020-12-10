@@ -9,8 +9,8 @@ import { RepoService } from '../repo.service';
   styleUrls: ['./repo-detail.component.css']
 })
 export class RepoDetailComponent implements OnInit {
-  //@Input() repo!: Repo;
-  repo!: Repo;
+  @Input() repo!: Repo;
+  //repo!: Repo;
   
   constructor(
     private route: ActivatedRoute,
@@ -27,10 +27,6 @@ export class RepoDetailComponent implements OnInit {
     if(!name || !owner) return;
     this.repoService.getRepo(owner, name)
       .subscribe(repo => this.repo = repo);
-  }
-
-  goBack(): void {
-    //this.location.back();
   }
 
 }

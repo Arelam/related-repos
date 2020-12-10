@@ -1,7 +1,7 @@
 <div id="search-component">
 	<form (submit)="onSearch(searchInput.value)">
 		<mat-form-field>
-			<mat-label>Search for repos</mat-label>
+			<mat-label>Search for organization</mat-label>
 			<input matInput matNativeControl #searchInput 
 			id="search-box" type="text" placeholder="Organization name"
 			(input)=typeSearch(searchInput.value)>

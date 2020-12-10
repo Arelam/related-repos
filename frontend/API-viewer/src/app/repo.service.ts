@@ -11,14 +11,14 @@ import { Organization } from './organization';
 })
 export class RepoService {
 
-  private reposUrl = 'http://0.0.0.0:8000/relatedRepositories/';  // URL to web api
+  private reposUrl = 'http://0.0.0.0:8000/';  // URL to web api
 
   constructor(
     private http: HttpClient
   ) { }
 
   getRelatedRepositories(org: string): Observable<Organization> {
-    return this.http.get<Organization>(this.reposUrl + org)
+    return this.http.get<Organization>(this.reposUrl + 'relatedRepositories/' + org)
     .pipe(
       catchError(this.handleError<Organization>('getRelatedRepositories'))
     );

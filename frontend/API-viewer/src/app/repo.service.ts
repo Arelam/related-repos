@@ -20,6 +20,11 @@ export class RepoService {
   getRelatedRepositories(org: string): Observable<Organization> {
     return this.http.get<Organization>(this.reposUrl + 'relatedRepositories/' + org)
     .pipe(
+      // Instead of mapping, we are tapping https://stackoverflow.com/a/50276301
+      tap(results => { // Sort these results (array reverse could be used instead of reversing order of compare)
+        results.repositories.sort((a, b) => b.watchers_count - a.watchers_count);
+        results.repositories.sort((a, b) => b.stargazers_count - a.stargazers_count);
+      }),
       catchError(this.handleError<Organization>('getRelatedRepositories'))
     );
   }

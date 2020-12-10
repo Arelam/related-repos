@@ -12,9 +12,8 @@
 		</mat-card-header>
 
 		<mat-card-content>
-			<div>Stats:</div>
-			<div>Watchers: {{ repo.watchers_count }}</div>
-			<div>Stars: {{ repo.stargazers_count }}</div>
+			<span aria-label="Watchers" title="Watchers">👁️</span>: <span aria-label="watcher count">{{ repo.watchers_count }}</span>
+			<span aria-label="Stars" title="Stars">⭐</span> <span aria-label="starred count">{{ repo.stargazers_count }}</span>
 			<p>{{ repo.description }}</p>
 		</mat-card-content>
 

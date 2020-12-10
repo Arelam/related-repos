@@ -1,0 +1,36 @@
+.container.two {
+	display: flex;
+	display: grid;
+	grid-template-columns: 1.8fr 1fr;
+	column-gap: 2em;
+}
+
+.container {
+
+}
+
+.list-selectable.container {
+	max-width: 40em;
+	overflow-x: scroll;
+	height: 100%;
+}
+
+.card-aside.container {
+	
+	
+}
+
+.card-aside.container app-repo-detail {
+	max-width: 26em;
+	position: fixed;
+}
+
+@media (max-width: 60em) {
+	.list-selectable.container {
+		width: 100%;
+	}
+
+	.card-aside.container {
+		width: 100%;
+	}
+}

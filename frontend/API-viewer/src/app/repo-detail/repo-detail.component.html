@@ -3,11 +3,9 @@
 		<mat-card-header>
 			<mat-card-title>{{ repo.name }}</mat-card-title>
 			<mat-card-subtitle>By 
-				<a routerLink="/{{repo.owner}}/list">
-					<img mat-card-avatar [src]="repo.owner_avatar_url" 
-					[alt]="repo.owner+' avatar'" class="avatar">
-					{{ repo.owner }}
-				</a>
+				<img mat-card-avatar [src]="repo.owner_avatar_url" 
+				[alt]="repo.owner+' avatar'" class="avatar">
+				{{ repo.owner }}
 			</mat-card-subtitle>
 		</mat-card-header>
 

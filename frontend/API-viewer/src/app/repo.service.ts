@@ -4,7 +4,7 @@ import { REPOS } from './mock-repos';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Owner } from './owner';
+import { Organization } from './organization';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,10 @@ export class RepoService {
     private http: HttpClient
   ) { }
 
-  getOwner(org: string): Observable<Owner> {
-    return this.http.get<Owner>(this.reposUrl + org)
+  getRelatedRepositories(org: string): Observable<Organization> {
+    return this.http.get<Organization>(this.reposUrl + org)
     .pipe(
-      catchError(this.handleError<Owner>('getOwner'))
+      catchError(this.handleError<Organization>('getRelatedRepositories'))
     );
   }
 

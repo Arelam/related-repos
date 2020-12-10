@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Owner } from '../owner';
+import { Organization } from '../organization';
 import { Repo } from '../repo';
 import { RepoService } from '../repo.service';
 
@@ -10,7 +10,7 @@ import { RepoService } from '../repo.service';
   styleUrls: ['./repos.component.css']
 })
 export class ReposComponent implements OnInit {
-  related!: Owner;
+  related!: Organization;
   orgSearch!: string;
 
   selectedRepo!: Repo;
@@ -24,7 +24,7 @@ export class ReposComponent implements OnInit {
     let org = this.route.snapshot.paramMap.get('owner');
     if(!org) return;
     this.orgSearch = org;
-    this.repoService.getOwner(org)
+    this.repoService.getRelatedRepositories(org)
       .subscribe(rep => this.related = rep)
   }
 

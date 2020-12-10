@@ -1,22 +1,13 @@
 .container.two {
-	display: flex;
 	display: grid;
 	grid-template-columns: 1.8fr 1fr;
 	column-gap: 2em;
 }
 
-.container {
-
-}
-
 .list-selectable.container {
-	max-width: 40em;
+	/*max-width: 40em;*/
 	overflow-x: scroll;
 	height: 100%;
-}
-
-.card-aside.container {
-		
 }
 
 .card-aside.container app-repo-detail {
@@ -24,12 +15,27 @@
 	position: fixed;
 }
 
-@media (max-width: 60em) {
+.focus {
+	margin: auto;
+	width: 100px;
+}
+
+@media (max-width: 40em) {
+	.container.two {
+		display: block;
+	}
+
 	.list-selectable.container {
 		width: 100%;
 	}
 
-	.card-aside.container {
-		width: 100%;
+	.card-aside.container app-repo-detail {
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.card-aside.container button.close {
+		display: inline;
 	}
 }

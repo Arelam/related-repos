@@ -10,12 +10,13 @@
 			</mat-list-option>
 		</mat-selection-list>
 	</div>
-	<div class="focus center" *ngIf="!related">
-		<mat-spinner></mat-spinner>
-		<p>Searching for repos...</p>
-	</div>
 
 	<div class="card-aside container">
 		<app-repo-detail [repo]="selectedRepo"></app-repo-detail>
 	</div>
+</div>
+
+<div class="focus center" *ngIf="!related">
+	<mat-spinner></mat-spinner>
+	<p>Searching for repos...</p>
 </div>

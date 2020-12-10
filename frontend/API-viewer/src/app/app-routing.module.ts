@@ -7,8 +7,7 @@ import { RepoDetailComponent } from './repo-detail/repo-detail.component';
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: ':owner/list', component: ReposComponent },
-  { path: ':owner/detail/:name', component: RepoDetailComponent },
+  { path: ':organization/list', component: ReposComponent },
 ];
 
 @NgModule({

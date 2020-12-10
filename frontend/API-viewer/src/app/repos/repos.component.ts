@@ -21,7 +21,7 @@ export class ReposComponent implements OnInit {
   ) { }
 
   getRelatedRepos(): void {
-    let org = this.route.snapshot.paramMap.get('owner');
+    let org = this.route.snapshot.paramMap.get('organization');
     if(!org) return;
     this.orgSearch = org;
     this.repoService.getRelatedRepositories(org)

@@ -4,7 +4,7 @@
 			<mat-card-title>{{ repo.name }}</mat-card-title>
 			<mat-card-subtitle>By 
 				<a routerLink="/{{repo.owner}}/list">
-					<img mat-mat-card-image [src]="repo.owner_avatar_url" 
+					<img mat-card-avatar [src]="repo.owner_avatar_url" 
 					[alt]="repo.owner+' avatar'" class="avatar">
 					{{ repo.owner }}
 				</a>
@@ -16,12 +16,10 @@
 			<div>Watchers: {{ repo.watchers_count }}</div>
 			<div>Stars: {{ repo.stargazers_count }}</div>
 			<p>{{ repo.description }}</p>
-			<a [href]="repo.url" target="_blank">GitHub page</a>
 		</mat-card-content>
-	</mat-card>
-</div>
 
-<div *ngIf="!repo">
-	<mat-spinner></mat-spinner>
-	Loading details...
+		<mat-card-actions>
+			<button mat-button><a [href]="repo.url" target="_blank">GitHub page</a></button>
+		</mat-card-actions>
+	</mat-card>
 </div>

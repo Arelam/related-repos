@@ -16,19 +16,10 @@ class GitHubAPI():
             headers=self.__headers
             )
 
-    async def filteredOwned(self, name):
-        #await self.getOwned(name)
-        related = await self.getOwned(name)
-        
-        
-        # repoOrg = related["organization"]["repositories"]["nodes"]
-        # repoMember = repoList["organization"]["membersWithRole"]["nodes"]["repositories"]["nodes"]
-        # repoMemberWatch = repoList["organization"]["membersWithRole"]["nodes"]["watching"]["nodes"]
-        
-        # https://stackoverflow.com/a/26853961
-        #repoMerge = {**repoOrg, **repoMember, **repoMemberWatch}
-
-        #repos = self.filterResponse(await self.getOwned(name))
+    async def filteredRelatedRepos(self, name):
+        query = self.gql.relatedRepos()
+        related = await self.queryAPI(query, name)
+        #repos = self.extractNodeLists(await self.getOwned(name))
         repos = self.extractNodeLists(related)
         repoJson = {}
         repoJson["repositories"] = repos
@@ -36,24 +27,32 @@ class GitHubAPI():
     
     @staticmethod
     def extractNodeLists(dictNode):
+        # alternative merge extractions TODO work on
+        # repoOrg = related["organization"]["repositories"]["nodes"]
+        # repoMember = repoList["organization"]["membersWithRole"]["nodes"]["repositories"]["nodes"]
+        # repoMemberWatch = repoList["organization"]["membersWithRole"]["nodes"]["watching"]["nodes"]
+
+        # https://stackoverflow.com/a/26853961
+        #repoMerge = {**repoOrg, **repoMember, **repoMemberWatch}
+
         lists = []
         for node in dictNode["organization"]["repositories"]["nodes"]:
-            out = GitHubAPI.filterRepoData(node)
+            out = GitHubAPI.mapRepoData(node)
             lists.append(out)
         for node in dictNode["organization"]["membersWithRole"]["nodes"]:
             for innerNode in node["repositories"]["nodes"]:
-                out = GitHubAPI.filterRepoData(innerNode)
+                out = GitHubAPI.mapRepoData(innerNode)
                 if out not in lists:
                     lists.append(out)
             for innerNode in node["watching"]["nodes"]:
-                out = GitHubAPI.filterRepoData(innerNode)
+                out = GitHubAPI.mapRepoData(innerNode)
                 if out not in lists:
                     lists.append(out)
         return lists
 
     
     @staticmethod
-    def filterRepoData(repo):
+    def mapRepoData(repo):
         out = {}
         out["name"] = repo["name"]
         out["description"] = repo["description"]
@@ -63,6 +62,22 @@ class GitHubAPI():
         out["stargazers_count"] = repo["stargazerCount"]
         out["watchers_count"] = repo["watchers"]["totalCount"]
         return out
+    
+    async def queryAPI(self, queryString, arg_org):
+        # Using `async with` on the client will start a connection on the transport
+        # and provide a `session` variable to execute queries on this connection
+        async with Client(
+                transport=self.__transport, fetch_schema_from_transport=True,
+        ) as session:
+
+            # Execute single query
+            query = gql(queryString)
+            params = {
+                "name": arg_org
+            }
+            result = await session.execute(query, params)
+            return result
+
 
     async def filteredRepo(self, org, repo):
         await self.getRepo(org, repo)
@@ -100,24 +115,6 @@ class GitHubAPI():
         out["stargazers_count"] = node["stargazerCount"]
         out["watchers_count"] = node["watchers"]["totalCount"]
         return out
-
-    async def getOwned(self, arg_org):
-
-        # Using `async with` on the client will start a connection on the transport
-        # and provide a `session` variable to execute queries on this connection
-        async with Client(
-                transport=self.__transport, fetch_schema_from_transport=True,
-        ) as session:
-
-            # Execute single query
-            query = gql(self.gql.relatedRepos())
-            params = {
-                "name": arg_org
-            }
-            result = await session.execute(query, params)
-            #self.repos = result
-            return result
-            #return result#["organization"]["repositories"]["edges"]
 
     @staticmethod
     def filterResponse(repoList):

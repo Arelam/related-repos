@@ -16,7 +16,7 @@ async def hello(request):
 @routes.get('/relatedRepositories/{name}')
 async def handle(request):
     name = request.match_info.get('name')
-    repos = await api.filteredOwned(name)
+    repos = await api.filteredRelatedRepos(name)
     return web.json_response(repos, status=200)
 
 @routes.get('/relatedRepositories/{name}/{repo}')
